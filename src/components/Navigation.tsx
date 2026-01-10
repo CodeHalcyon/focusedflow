@@ -1,11 +1,13 @@
 import { NavLink } from 'react-router-dom';
-import { Home, BarChart3, Moon, Sun } from 'lucide-react';
+import { Home, BarChart3, Moon, Sun, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/hooks/useTheme';
+import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
 export function Navigation() {
   const { theme, toggleTheme } = useTheme();
+  const { signOut, user } = useAuth();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
@@ -41,18 +43,37 @@ export function Navigation() {
           </NavLink>
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleTheme}
-          className="text-muted-foreground hover:text-foreground"
-        >
-          {theme === 'dark' ? (
-            <Sun className="h-4 w-4" />
-          ) : (
-            <Moon className="h-4 w-4" />
+        <div className="flex items-center gap-2">
+          {user && (
+            <span className="text-xs text-muted-foreground hidden sm:block max-w-[150px] truncate">
+              {user.email}
+            </span>
           )}
-        </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="text-muted-foreground hover:text-foreground"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </Button>
+          {user && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={signOut}
+              className="text-muted-foreground hover:text-foreground"
+              aria-label="Sign out"
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
     </nav>
   );

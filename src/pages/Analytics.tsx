@@ -2,11 +2,11 @@ import { Navigation } from '@/components/Navigation';
 import { useWorkData } from '@/hooks/useWorkData';
 import { formatDuration, getDateLabel } from '@/lib/dateUtils';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { Flame, Clock, CheckCircle2, TrendingUp } from 'lucide-react';
+import { Flame, Clock, CheckCircle2, TrendingUp, Loader2 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
 const Analytics = () => {
-  const { getRecentDays, getStreak } = useWorkData();
+  const { getRecentDays, getStreak, loading } = useWorkData();
   
   const recentDays = getRecentDays(14);
   const streak = getStreak();
@@ -30,6 +30,17 @@ const Analytics = () => {
     incomplete: day.tasks.filter(t => !t.completed).length,
     fullDate: day.date,
   }));
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <Navigation />
+        <div className="pt-20 flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">

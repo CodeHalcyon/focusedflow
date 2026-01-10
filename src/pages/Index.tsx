@@ -9,6 +9,7 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useWorkData } from '@/hooks/useWorkData';
 import type { ClockSettings } from '@/types';
 import { format } from 'date-fns';
+import { Loader2 } from 'lucide-react';
 
 const defaultClockSettings: ClockSettings = {
   theme: 'neon',
@@ -26,6 +27,7 @@ const Index = () => {
   
   const {
     todayData,
+    loading,
     addTask,
     toggleTask,
     deleteTask,
@@ -35,6 +37,17 @@ const Index = () => {
 
   const today = new Date();
   const dateString = format(today, 'EEEE, MMMM d');
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <Navigation />
+        <div className="pt-20 flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
