@@ -5,6 +5,7 @@ import { WorkTimer } from '@/components/WorkTimer';
 import { TaskList } from '@/components/TaskList';
 import { DailyQuote } from '@/components/DailyQuote';
 import { DailySummary } from '@/components/DailySummary';
+import { ShareableStatsCard } from '@/components/ShareableStatsCard';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useWorkData } from '@/hooks/useWorkData';
 import type { ClockSettings } from '@/types';
@@ -96,8 +97,11 @@ const Index = () => {
           </section>
 
           {/* Daily Summary */}
-          <section>
+          <section className="space-y-4">
             <DailySummary data={todayData} />
+            <div className="flex justify-center">
+              <ShareableStatsCard />
+            </div>
           </section>
         </div>
       </main>
