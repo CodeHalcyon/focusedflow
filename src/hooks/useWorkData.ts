@@ -331,6 +331,22 @@ export function useWorkData() {
     return streak;
   }, [allData, todayData]);
 
+  // Get total stats across all time
+  const getTotalStats = useCallback(() => {
+    let totalSeconds = 0;
+    let completedTasks = 0;
+
+    Object.values(allData).forEach((day) => {
+      totalSeconds += day.workSession.duration;
+      completedTasks += day.tasks.filter((t) => t.completed).length;
+    });
+
+    return {
+      totalHours: Math.floor(totalSeconds / 3600),
+      completedTasks,
+    };
+  }, [allData]);
+
   return {
     todayData,
     allData,
@@ -342,5 +358,6 @@ export function useWorkData() {
     stopWork,
     getRecentDays,
     getStreak,
+    getTotalStats,
   };
 }
