@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { Clock } from '@/components/Clock';
 import { ClockSettingsPanel } from '@/components/ClockSettings';
@@ -6,8 +7,11 @@ import { TaskList } from '@/components/TaskList';
 import { DailyQuote } from '@/components/DailyQuote';
 import { DailySummary } from '@/components/DailySummary';
 import { ShareableStatsCard } from '@/components/ShareableStatsCard';
+import { DailyGoalProgress } from '@/components/DailyGoalProgress';
+import { AchievementsPanel } from '@/components/AchievementsPanel';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useWorkData } from '@/hooks/useWorkData';
+import { useAchievements } from '@/hooks/useAchievements';
 import type { ClockSettings } from '@/types';
 import { format } from 'date-fns';
 import { Loader2 } from 'lucide-react';
@@ -34,10 +38,28 @@ const Index = () => {
     deleteTask,
     startWork,
     stopWork,
+    getStreak,
+    getTotalStats,
   } = useWorkData();
+
+  const { checkAndUnlock } = useAchievements();
 
   const today = new Date();
   const dateString = format(today, 'EEEE, MMMM d');
+
+  const streak = getStreak();
+  const { totalHours, completedTasks } = getTotalStats();
+  const stats = { streak, totalHours, completedTasks };
+
+  // Check for new achievements when stats change
+  useEffect(() => {
+    if (!loading) {
+      checkAndUnlock(stats);
+    }
+  }, [loading, streak, totalHours, completedTasks]);
+
+  // Convert today's duration from seconds to minutes for goal progress
+  const todayMinutes = Math.floor(todayData.workSession.duration / 60);
 
   if (loading) {
     return (
@@ -77,6 +99,11 @@ const Index = () => {
             <DailyQuote />
           </section>
 
+          {/* Daily Goal Progress */}
+          <section className="bg-card rounded-xl border p-4">
+            <DailyGoalProgress currentMinutes={todayMinutes} />
+          </section>
+
           {/* Work Timer */}
           <section>
             <WorkTimer
@@ -102,6 +129,11 @@ const Index = () => {
             <div className="flex justify-center">
               <ShareableStatsCard />
             </div>
+          </section>
+
+          {/* Achievements */}
+          <section>
+            <AchievementsPanel stats={stats} />
           </section>
         </div>
       </main>
