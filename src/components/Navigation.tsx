@@ -13,13 +13,13 @@ export function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <NavLink to="/" className="flex items-center gap-2">
+          <NavLink to="/app" className="flex items-center gap-2">
             <img src="/favicon.png" alt="Focus" className="h-7 w-7" />
             <span className="font-semibold text-lg hidden sm:inline">Focus</span>
           </NavLink>
           <div className="flex items-center gap-1">
             <NavLink
-              to="/"
+              to="/app"
               className={({ isActive }) =>
                 cn(
                   'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors',
