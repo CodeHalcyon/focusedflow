@@ -1,142 +1,144 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   Clock, BarChart3, Target, Trophy, ArrowRight, CheckCircle, 
-  Zap, Shield, Smartphone, Moon, Share2, Users, Play, Star
+  Zap, Shield, Moon, Share2, Play, Star
 } from "lucide-react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Landing() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const featuresRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const howItWorksRef = useRef<HTMLDivElement>(null);
-  const testimonialsRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
+  // Dynamically import and register GSAP to avoid React hook conflicts
+  useLayoutEffect(() => {
+    let ctx: ReturnType<typeof import("gsap").gsap.context> | undefined;
+    
+    const initGSAP = async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsap.registerPlugin(ScrollTrigger);
+      
+      ctx = gsap.context(() => {
+        // Hero animations
+        gsap.fromTo(
+          ".hero-title",
+          { opacity: 0, y: 60 },
+          { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+        );
+        gsap.fromTo(
+          ".hero-subtitle",
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: "power3.out" }
+        );
+        gsap.fromTo(
+          ".hero-cta",
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: "power3.out" }
+        );
+        gsap.fromTo(
+          ".hero-visual",
+          { opacity: 0, scale: 0.9 },
+          { opacity: 1, scale: 1, duration: 1.2, delay: 0.3, ease: "power3.out" }
+        );
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Hero animations
-      gsap.fromTo(
-        ".hero-title",
-        { opacity: 0, y: 60 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-      );
-      gsap.fromTo(
-        ".hero-subtitle",
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: "power3.out" }
-      );
-      gsap.fromTo(
-        ".hero-cta",
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: "power3.out" }
-      );
-      gsap.fromTo(
-        ".hero-visual",
-        { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1, duration: 1.2, delay: 0.3, ease: "power3.out" }
-      );
+        // Floating animation for hero visual
+        gsap.to(".hero-visual", {
+          y: -10,
+          duration: 2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
+        });
 
-      // Floating animation for hero visual
-      gsap.to(".hero-visual", {
-        y: -10,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
+        // Stats counter animation
+        gsap.fromTo(
+          ".stat-item",
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".stats-section",
+              start: "top 80%",
+            }
+          }
+        );
+
+        // Feature cards stagger animation
+        gsap.fromTo(
+          ".feature-card",
+          { opacity: 0, y: 60 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".features-section",
+              start: "top 75%",
+            }
+          }
+        );
+
+        // How it works steps
+        gsap.fromTo(
+          ".step-item",
+          { opacity: 0, x: -40 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".how-it-works-section",
+              start: "top 75%",
+            }
+          }
+        );
+
+        // Testimonials
+        gsap.fromTo(
+          ".testimonial-card",
+          { opacity: 0, scale: 0.9 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.7,
+            stagger: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".testimonials-section",
+              start: "top 80%",
+            }
+          }
+        );
+
+        // CTA section
+        gsap.fromTo(
+          ".cta-content",
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".cta-section",
+              start: "top 85%",
+            }
+          }
+        );
       });
-
-      // Stats counter animation
-      gsap.fromTo(
-        ".stat-item",
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 80%",
-          }
-        }
-      );
-
-      // Feature cards stagger animation
-      gsap.fromTo(
-        ".feature-card",
-        { opacity: 0, y: 60 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: featuresRef.current,
-            start: "top 75%",
-          }
-        }
-      );
-
-      // How it works steps
-      gsap.fromTo(
-        ".step-item",
-        { opacity: 0, x: -40 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          stagger: 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: howItWorksRef.current,
-            start: "top 75%",
-          }
-        }
-      );
-
-      // Testimonials
-      gsap.fromTo(
-        ".testimonial-card",
-        { opacity: 0, scale: 0.9 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.7,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: testimonialsRef.current,
-            start: "top 80%",
-          }
-        }
-      );
-
-      // CTA section
-      gsap.fromTo(
-        ".cta-content",
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ctaRef.current,
-            start: "top 85%",
-          }
-        }
-      );
-    });
-
-    return () => ctx.revert();
+    };
+    
+    initGSAP();
+    
+    return () => {
+      ctx?.revert();
+    };
   }, []);
 
   return (
@@ -176,7 +178,7 @@ export default function Landing() {
 
       <main>
         {/* Hero Section */}
-        <section ref={heroRef} className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
+        <section className="hero-section relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
           {/* Background gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
           <div className="absolute top-20 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
@@ -247,7 +249,7 @@ export default function Landing() {
         </section>
 
         {/* Stats Section */}
-        <section ref={statsRef} className="py-16 border-y border-border/40 bg-muted/20">
+        <section className="stats-section py-16 border-y border-border/40 bg-muted/20">
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <StatItem value="10,000+" label="Developers" />
@@ -259,7 +261,7 @@ export default function Landing() {
         </section>
 
         {/* Features Section */}
-        <section id="features" ref={featuresRef} className="py-24 md:py-32">
+        <section id="features" className="features-section py-24 md:py-32">
           <div className="container mx-auto px-6">
             <div className="text-center max-w-2xl mx-auto mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -317,7 +319,7 @@ export default function Landing() {
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" ref={howItWorksRef} className="py-24 md:py-32 bg-muted/30 border-y border-border/40">
+        <section id="how-it-works" className="how-it-works-section py-24 md:py-32 bg-muted/30 border-y border-border/40">
           <div className="container mx-auto px-6">
             <div className="text-center max-w-2xl mx-auto mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -355,7 +357,7 @@ export default function Landing() {
         </section>
 
         {/* Testimonials Section */}
-        <section ref={testimonialsRef} className="py-24 md:py-32">
+        <section className="testimonials-section py-24 md:py-32">
           <div className="container mx-auto px-6">
             <div className="text-center max-w-2xl mx-auto mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -436,7 +438,7 @@ export default function Landing() {
         </section>
 
         {/* CTA Section */}
-        <section ref={ctaRef} className="py-24 md:py-32 relative overflow-hidden">
+        <section className="cta-section py-24 md:py-32 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent pointer-events-none" />
           <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
           
