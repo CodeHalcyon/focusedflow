@@ -9,6 +9,7 @@ import { DailySummary } from '@/components/DailySummary';
 import { ShareableStatsCard } from '@/components/ShareableStatsCard';
 import { DailyGoalProgress } from '@/components/DailyGoalProgress';
 import { AchievementsPanel } from '@/components/AchievementsPanel';
+import { StickyNotes } from '@/components/StickyNotes';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useWorkData } from '@/hooks/useWorkData';
 import { useAchievements } from '@/hooks/useAchievements';
@@ -121,6 +122,11 @@ const Index = () => {
               onToggleTask={toggleTask}
               onDeleteTask={deleteTask}
             />
+          </section>
+
+          {/* Sticky Notes */}
+          <section>
+            <StickyNotes />
           </section>
 
           {/* Daily Summary */}
