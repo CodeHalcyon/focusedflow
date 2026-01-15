@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useDailyGoal } from '@/hooks/useDailyGoal';
+import { toast } from 'sonner';
 
 interface DailyGoalProgressProps {
   currentMinutes: number;
@@ -40,10 +41,12 @@ export function DailyGoalProgress({ currentMinutes }: DailyGoalProgressProps) {
 
   const handleSave = async () => {
     const minutes = parseInt(editValue, 10);
-    if (!isNaN(minutes) && minutes > 0 && minutes <= 1440) {
-      await updateGoal(minutes);
-      setIsOpen(false);
+    if (isNaN(minutes) || minutes < 1 || minutes > 1440) {
+      toast.error('Goal must be between 1 minute and 24 hours');
+      return;
     }
+    await updateGoal(minutes);
+    setIsOpen(false);
   };
 
   return (

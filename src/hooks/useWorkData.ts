@@ -97,12 +97,20 @@ export function useWorkData() {
   const addTask = useCallback(async (text: string) => {
     if (!user) return;
 
+    // Input validation: limit task text to 500 characters
+    const trimmedText = text.trim();
+    if (trimmedText.length === 0) return;
+    if (trimmedText.length > 500) {
+      console.error('Task text exceeds 500 character limit');
+      return;
+    }
+
     const { data, error } = await supabase
       .from('tasks')
       .insert({
         user_id: user.id,
         date: todayKey,
-        text,
+        text: trimmedText,
         completed: false,
       })
       .select()

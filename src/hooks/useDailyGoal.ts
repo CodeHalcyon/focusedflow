@@ -38,6 +38,12 @@ export function useDailyGoal() {
     async (minutes: number) => {
       if (!user) return;
 
+      // Input validation: goal must be between 1 and 1440 minutes (24 hours)
+      if (!Number.isInteger(minutes) || minutes < 1 || minutes > 1440) {
+        console.error('Goal must be between 1 and 1440 minutes');
+        return;
+      }
+
       // Check if goal exists
       const { data: existing } = await supabase
         .from('user_goals')
