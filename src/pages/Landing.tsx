@@ -248,17 +248,6 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="stats-section py-16 border-y border-border/40 bg-muted/20">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <StatItem value="10,000+" label="Developers" />
-              <StatItem value="2M+" label="Hours Tracked" />
-              <StatItem value="98%" label="Satisfaction" />
-              <StatItem value="150+" label="Countries" />
-            </div>
-          </div>
-        </section>
 
         {/* Features Section */}
         <section id="features" className="features-section py-24 md:py-32">
@@ -508,16 +497,6 @@ export default function Landing() {
   );
 }
 
-function StatItem({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="stat-item text-center group cursor-default">
-      <div className="text-3xl md:text-4xl font-bold text-gradient transition-transform duration-300 group-hover:scale-105">
-        {value}
-      </div>
-      <div className="text-sm text-muted-foreground mt-1">{label}</div>
-    </div>
-  );
-}
 
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
   return (
