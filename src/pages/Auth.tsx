@@ -113,6 +113,28 @@ const Auth = () => {
           </p>
         </div>
 
+        {/* Onboarding instructions for signup */}
+        {!isLogin && (
+          <div className="glass rounded-xl p-4 border border-primary/20 bg-primary/5">
+            <h3 className="text-sm font-semibold mb-2 flex items-center gap-2">
+              <Mail className="h-4 w-4 text-primary" />
+              How to Sign Up
+            </h3>
+            <ol className="text-xs text-muted-foreground space-y-1.5 list-decimal list-inside">
+              <li>Enter your email and create a password (min. 6 characters)</li>
+              <li>Click "Create Account" to register</li>
+              <li>Check your email for a verification link</li>
+              <li>Click the link to verify your account</li>
+            </ol>
+            <div className="mt-3 p-2 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+              <p className="text-xs text-amber-600 dark:text-amber-400 flex items-start gap-1.5">
+                <span className="text-base leading-none">⚠️</span>
+                <span><strong>Can't find the email?</strong> Check your spam/junk folder. The verification email may land there.</span>
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="glass rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
