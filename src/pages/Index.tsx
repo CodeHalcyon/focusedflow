@@ -5,6 +5,7 @@ import { ClockSettingsPanel } from '@/components/ClockSettings';
 import { WorkTimer } from '@/components/WorkTimer';
 import { TaskList } from '@/components/TaskList';
 import { DailyQuote } from '@/components/DailyQuote';
+import { DailyImage } from '@/components/DailyImage';
 import { DailySummary } from '@/components/DailySummary';
 import { ShareableStatsCard } from '@/components/ShareableStatsCard';
 import { DailyGoalProgress } from '@/components/DailyGoalProgress';
@@ -30,7 +31,7 @@ const Index = () => {
     'clockSettings',
     defaultClockSettings
   );
-  
+
   const {
     todayData,
     loading,
@@ -76,7 +77,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
-      
+
       <main className="pt-20 pb-12 px-4">
         <div className="max-w-3xl mx-auto space-y-8">
           {/* Header with date and clock settings */}
@@ -97,7 +98,8 @@ const Index = () => {
 
           {/* Daily Quote */}
           <section className="py-6">
-            <DailyQuote />
+            {/* <DailyQuote /> */}
+            <DailyImage />
           </section>
 
           {/* Daily Goal Progress */}

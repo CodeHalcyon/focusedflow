@@ -147,11 +147,11 @@ export default function Landing() {
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-lg">
         <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 group" aria-label="Focus - Home">
-            <div className="relative">
+            {/* <div className="relative">
               <Clock className="h-7 w-7 text-primary transition-transform duration-300 group-hover:rotate-12" />
               <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-            <span className="text-xl font-bold tracking-tight">Focus</span>
+            </div> */}
+            <span className="text-xl font-bold tracking-tight">StayRAw</span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors relative group">
