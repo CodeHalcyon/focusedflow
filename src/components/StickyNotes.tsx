@@ -63,8 +63,21 @@ export const StickyNotes = () => {
   };
 
   const addNote = async () => {
-    if (!newNote.content.trim()) {
+    const trimmedContent = newNote.content.trim();
+    const trimmedTitle = newNote.title.trim();
+
+    if (!trimmedContent) {
       toast.error('Please write something');
+      return;
+    }
+
+    // Input validation: limit content to 10,000 characters and title to 200 characters
+    if (trimmedContent.length > 10000) {
+      toast.error('Note content must be under 10,000 characters');
+      return;
+    }
+    if (trimmedTitle.length > 200) {
+      toast.error('Title must be under 200 characters');
       return;
     }
 
@@ -73,8 +86,8 @@ export const StickyNotes = () => {
         .from('sticky_notes')
         .insert({
           user_id: user?.id,
-          title: newNote.title.trim() || null,
-          content: newNote.content.trim(),
+          title: trimmedTitle || null,
+          content: trimmedContent,
           color: newNote.color,
         })
         .select()
@@ -92,8 +105,21 @@ export const StickyNotes = () => {
   };
 
   const updateNote = async (id: string) => {
-    if (!editNote.content.trim()) {
+    const trimmedContent = editNote.content.trim();
+    const trimmedTitle = editNote.title.trim();
+
+    if (!trimmedContent) {
       toast.error('Note cannot be empty');
+      return;
+    }
+
+    // Input validation: limit content to 10,000 characters and title to 200 characters
+    if (trimmedContent.length > 10000) {
+      toast.error('Note content must be under 10,000 characters');
+      return;
+    }
+    if (trimmedTitle.length > 200) {
+      toast.error('Title must be under 200 characters');
       return;
     }
 
@@ -101,8 +127,8 @@ export const StickyNotes = () => {
       const { error } = await supabase
         .from('sticky_notes')
         .update({
-          title: editNote.title.trim() || null,
-          content: editNote.content.trim(),
+          title: trimmedTitle || null,
+          content: trimmedContent,
           color: editNote.color,
         })
         .eq('id', id);
