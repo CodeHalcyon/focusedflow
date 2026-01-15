@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import type { Task } from '@/types';
 import { cn } from '@/lib/utils';
+import { ShareableStatsCard } from './ShareableStatsCard';
 
 interface TaskListProps {
   tasks: Task[];

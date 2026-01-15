@@ -46,7 +46,7 @@ export function ShareableStatsCard() {
       const html2canvas = (await import('html2canvas')).default;
       const canvas = await html2canvas(cardRef.current, {
         scale: 3,
-        backgroundColor: null,
+        backgroundColor: '#ffffff',
         useCORS: true,
       });
       
@@ -85,7 +85,7 @@ export function ShareableStatsCard() {
       const html2canvas = (await import('html2canvas')).default;
       const canvas = await html2canvas(cardRef.current, {
         scale: 3,
-        backgroundColor: null,
+        backgroundColor: '#ffffff',
         useCORS: true,
       });
       
@@ -126,118 +126,195 @@ export function ShareableStatsCard() {
           <DialogTitle>Share Your Focus</DialogTitle>
         </DialogHeader>
         
-        {/* The shareable card */}
+        {/* The shareable card - Strava style portrait */}
         <div className="flex justify-center py-4">
           <div
             ref={cardRef}
-            className="w-[320px] aspect-[9/16] rounded-3xl overflow-hidden relative"
+            className="w-[400px] aspect-[2/3] rounded-lg overflow-hidden relative bg-white"
             style={{
-              background: 'linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%)',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
             }}
           >
-            {/* Decorative elements */}
-            <div 
-              className="absolute top-0 right-0 w-48 h-48 opacity-20"
-              style={{
-                background: 'radial-gradient(circle, hsl(45, 93%, 47%) 0%, transparent 70%)',
-              }}
-            />
-            <div 
-              className="absolute bottom-20 left-0 w-32 h-32 opacity-10"
-              style={{
-                background: 'radial-gradient(circle, hsl(45, 93%, 47%) 0%, transparent 70%)',
-              }}
-            />
-            
             {/* Content */}
             <div className="relative h-full flex flex-col p-6">
               {/* Header */}
-              <div className="flex items-center gap-2 mb-2">
-                <img src="/favicon.png" alt="Focus" className="h-8 w-8" />
-                <span className="text-white font-bold text-xl">Focus</span>
+              <div className="mb-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <img src="/favicon.png" alt="Focus" className="h-8 w-8" />
+                  <h2 className="text-gray-900 font-bold text-xl leading-tight">Focus</h2>
+                </div>
+                <p className="text-gray-500 text-xs">
+                  {format(new Date(), 'EEEE, MMMM d, yyyy')}
+                </p>
               </div>
-              <p className="text-white/50 text-sm mb-8">
-                {format(new Date(), 'EEEE, MMMM d, yyyy')}
-              </p>
               
-              {/* Main stat */}
-              <div className="flex-1 flex flex-col justify-center">
-                <p className="text-white/60 text-sm uppercase tracking-wider mb-2">
+              {/* Main stat - Large and prominent */}
+              <div className="mb-6">
+                <p className="text-gray-500 text-xs uppercase tracking-widest mb-2 font-semibold">
                   Today's Focus Time
                 </p>
                 <p 
-                  className="text-5xl font-bold mb-8"
+                  className="text-6xl font-bold leading-none"
                   style={{ color: 'hsl(45, 93%, 47%)' }}
                 >
                   {formatDuration(todayData.workSession.duration)}
                 </p>
-                
-                {/* Stats grid */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white/5 rounded-2xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Flame className="h-4 w-4" style={{ color: 'hsl(45, 93%, 47%)' }} />
-                      <span className="text-white/60 text-xs">Streak</span>
-                    </div>
-                    <p className="text-white text-2xl font-bold">{streak} days</p>
-                  </div>
-                  
-                  <div className="bg-white/5 rounded-2xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle2 className="h-4 w-4" style={{ color: 'hsl(45, 93%, 47%)' }} />
-                      <span className="text-white/60 text-xs">Tasks</span>
-                    </div>
-                    <p className="text-white text-2xl font-bold">
-                      {completedTasks}/{totalTasks}
-                    </p>
-                  </div>
-                  
-                  <div className="bg-white/5 rounded-2xl p-4 col-span-2">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Calendar className="h-4 w-4" style={{ color: 'hsl(45, 93%, 47%)' }} />
-                      <span className="text-white/60 text-xs">This Week</span>
-                    </div>
-                    <p className="text-white text-2xl font-bold">
-                      {formatDuration(totalWeekMinutes)}
-                    </p>
-                  </div>
+              </div>
+              
+              {/* Weekly Activity Chart - SVG Area Chart */}
+              <div className="mb-6 flex-1 min-h-[180px]">
+                <p className="text-gray-500 text-xs uppercase tracking-wide mb-3 font-semibold">Weekly Activity</p>
+                <div className="relative w-full h-full">
+                  <svg viewBox="0 0 300 180" className="w-full h-full">
+                    {/* Calculate chart data */}
+                    {(() => {
+                      const maxDuration = Math.max(
+                        ...recentDays.map((d) => d.workSession.duration),
+                        1
+                      );
+                      const chartWidth = 280;
+                      const chartHeight = 150;
+                      const padding = 20;
+                      const pointSpacing = chartWidth / (recentDays.length - 1);
+                      
+                      // Generate points for area chart
+                      const points = recentDays.map((day, i) => {
+                        const x = padding + (i * pointSpacing);
+                        const y = chartHeight + padding - ((day.workSession.duration / maxDuration) * chartHeight);
+                        return { x, y, duration: day.workSession.duration };
+                      });
+                      
+                      // Create area path
+                      const areaPath = points.reduce((path, point, i) => {
+                        if (i === 0) {
+                          return `M ${point.x} ${chartHeight + padding} L ${point.x} ${point.y}`;
+                        }
+                        return `${path} L ${point.x} ${point.y}`;
+                      }, '') + ` L ${points[points.length - 1].x} ${chartHeight + padding} Z`;
+                      
+                      // Create line path
+                      const linePath = points.reduce((path, point, i) => {
+                        if (i === 0) {
+                          return `M ${point.x} ${point.y}`;
+                        }
+                        return `${path} L ${point.x} ${point.y}`;
+                      }, '');
+                      
+                      return (
+                        <>
+                          {/* Grid lines */}
+                          {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+                            const y = chartHeight + padding - (ratio * chartHeight);
+                            return (
+                              <line
+                                key={ratio}
+                                x1={padding}
+                                y1={y}
+                                x2={chartWidth + padding}
+                                y2={y}
+                                stroke="#F3F4F6"
+                                strokeWidth="1"
+                              />
+                            );
+                          })}
+                          
+                          {/* Area fill */}
+                          <path
+                            d={areaPath}
+                            fill="url(#gradient)"
+                            opacity="0.3"
+                          />
+                          
+                          {/* Line */}
+                          <path
+                            d={linePath}
+                            fill="none"
+                            stroke="hsl(45, 93%, 47%)"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          
+                          {/* Points */}
+                          {points.map((point, i) => {
+                            const isToday = i === recentDays.length - 1;
+                            return (
+                              <g key={i}>
+                                <circle
+                                  cx={point.x}
+                                  cy={point.y}
+                                  r={isToday ? 5 : point.duration > 0 ? 4 : 3}
+                                  fill={isToday ? 'hsl(45, 93%, 47%)' : point.duration > 0 ? 'hsl(45, 93%, 47%)' : '#E5E7EB'}
+                                  stroke="white"
+                                  strokeWidth="2"
+                                />
+                                {/* Day labels */}
+                                <text
+                                  x={point.x}
+                                  y={chartHeight + padding + 15}
+                                  textAnchor="middle"
+                                  fontSize="8"
+                                  fill="#9CA3AF"
+                                  fontFamily="system-ui, -apple-system, sans-serif"
+                                >
+                                  {format(new Date(recentDays[i].date), 'EEE').slice(0, 1)}
+                                </text>
+                              </g>
+                            );
+                          })}
+                          
+                          {/* Gradient definition */}
+                          <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                              <stop offset="0%" stopColor="hsl(45, 93%, 47%)" stopOpacity="0.4" />
+                              <stop offset="100%" stopColor="hsl(45, 93%, 47%)" stopOpacity="0.05" />
+                            </linearGradient>
+                          </defs>
+                        </>
+                      );
+                    })()}
+                  </svg>
                 </div>
               </div>
               
-              {/* Activity bars */}
-              <div className="mt-6">
-                <p className="text-white/40 text-xs mb-2">Last 7 days</p>
-                <div className="flex gap-1 items-end h-12">
-                  {recentDays.map((day, i) => {
-                    const maxDuration = Math.max(
-                      ...recentDays.map((d) => d.workSession.duration),
-                      1
-                    );
-                    const height = (day.workSession.duration / maxDuration) * 100;
-                    const isToday = i === recentDays.length - 1;
-                    
-                    return (
-                      <div
-                        key={day.date}
-                        className="flex-1 rounded-t-sm transition-all"
-                        style={{
-                          height: `${Math.max(height, 8)}%`,
-                          backgroundColor: isToday 
-                            ? 'hsl(45, 93%, 47%)' 
-                            : day.workSession.duration > 0 
-                              ? 'hsl(45, 93%, 47%, 0.4)' 
-                              : 'rgba(255,255,255,0.1)',
-                        }}
-                      />
-                    );
-                  })}
+              {/* Stats grid - Strava style */}
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className="border-l-4 pl-3" style={{ borderColor: 'hsl(45, 93%, 47%)' }}>
+                  <div className="flex items-center gap-1 mb-1">
+                    <Flame className="h-3 w-3 text-gray-400" />
+                    <span className="text-gray-500 text-[10px] uppercase tracking-wide font-semibold">Streak</span>
+                  </div>
+                  <p className="text-gray-900 text-2xl font-bold">{streak}</p>
+                  <p className="text-gray-400 text-[10px] mt-0.5">days</p>
+                </div>
+                
+                <div className="border-l-4 pl-3" style={{ borderColor: 'hsl(45, 93%, 47%)' }}>
+                  <div className="flex items-center gap-1 mb-1">
+                    <CheckCircle2 className="h-3 w-3 text-gray-400" />
+                    <span className="text-gray-500 text-[10px] uppercase tracking-wide font-semibold">Tasks</span>
+                  </div>
+                  <p className="text-gray-900 text-2xl font-bold">
+                    {completedTasks}
+                  </p>
+                  <p className="text-gray-400 text-[10px] mt-0.5">of {totalTasks}</p>
+                </div>
+                
+                <div className="border-l-4 pl-3" style={{ borderColor: 'hsl(45, 93%, 47%)' }}>
+                  <div className="flex items-center gap-1 mb-1">
+                    <Calendar className="h-3 w-3 text-gray-400" />
+                    <span className="text-gray-500 text-[10px] uppercase tracking-wide font-semibold">Week</span>
+                  </div>
+                  <p className="text-gray-900 text-2xl font-bold">
+                    {formatDuration(totalWeekMinutes)}
+                  </p>
+                  <p className="text-gray-400 text-[10px] mt-0.5">total</p>
                 </div>
               </div>
               
               {/* Footer */}
-              <div className="mt-4 pt-4 border-t border-white/10">
-                <p className="text-white/30 text-xs text-center">
-                  Made with Focus • focusapp.dev
+              <div className="mt-auto pt-4 border-t border-gray-200">
+                <p className="text-gray-400 text-xs text-center">
+                  focusapp.dev
                 </p>
               </div>
             </div>
