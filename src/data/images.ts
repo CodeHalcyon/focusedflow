@@ -24,6 +24,22 @@ export const images: Image[] = [
     {
         id:'img05',
         url:'https://i.pinimg.com/736x/4d/d6/86/4dd686c595211665d1e4c40dd78b37ca.jpg'
+    },
+    {
+        id:'img06',
+        url:'https://i.pinimg.com/736x/dd/16/50/dd16506ae1c514eeac1fda2d5118a294.jpg'
+    },
+    {
+        id:'img07',
+        url:'https://i.pinimg.com/736x/64/4e/fc/644efcc5ccacfe7c385d3de09ad44769.jpg'
+    },
+    {
+        id:'img08',
+        url:'https://i.pinimg.com/736x/06/e0/2c/06e02cb65ab5bb1ef5a711c72e76f22a.jpg'
+    },
+    {
+        id:'img09',
+        url:'https://i.pinimg.com/1200x/12/ce/8a/12ce8ac1fe5ae0e224764982cb0c926a.jpg',
     }
 ];
 

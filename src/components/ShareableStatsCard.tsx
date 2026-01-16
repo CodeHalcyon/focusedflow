@@ -312,11 +312,11 @@ export function ShareableStatsCard() {
               </div>
               
               {/* Footer */}
-              <div className="mt-auto pt-4 border-t border-gray-200">
+              {/* <div className="mt-auto pt-4 border-t border-gray-200">
                 <p className="text-gray-400 text-xs text-center">
                   focusapp.dev
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
