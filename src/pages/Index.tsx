@@ -16,7 +16,13 @@ import { useWorkData } from '@/hooks/useWorkData';
 import { useAchievements } from '@/hooks/useAchievements';
 import type { ClockSettings } from '@/types';
 import { format } from 'date-fns';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Share } from 'lucide-react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const defaultClockSettings: ClockSettings = {
   theme: 'neon',
@@ -90,23 +96,15 @@ const Index = () => {
               onSettingsChange={setClockSettings}
             />
           </div>
-
-          {/* Main Clock */}
-          <section className="py-12 flex flex-col items-center">
-            <Clock settings={clockSettings} />
-          </section>
-
-          {/* Daily Quote */}
-          <section className="py-6">
-            {/* <DailyQuote /> */}
-            <DailyImage />
-          </section>
-
           {/* Daily Goal Progress */}
           <section className="bg-card rounded-xl border p-4">
             <DailyGoalProgress currentMinutes={todayMinutes} />
           </section>
-
+          {/* Main Clock */}
+          <section className="py-12 flex flex-col items-center">
+            <Clock settings={clockSettings} />
+            <DailyQuote />
+          </section>
           {/* Work Timer */}
           <section>
             <WorkTimer
@@ -116,21 +114,26 @@ const Index = () => {
             />
           </section>
 
-          {/* Tasks */}
-          <section>
-            <TaskList
-              tasks={todayData.tasks}
-              onAddTask={addTask}
-              onToggleTask={toggleTask}
-              onDeleteTask={deleteTask}
-            />
-          </section>
+          <div className='flex gap-5'>
+            {/* Tasks */}
+            <section>
+              <TaskList
+                tasks={todayData.tasks}
+                onAddTask={addTask}
+                onToggleTask={toggleTask}
+                onDeleteTask={deleteTask}
+              />
+            </section>
 
-          {/* Sticky Notes */}
-          <section>
-            <StickyNotes />
+            {/* Sticky Notes */}
+            <section>
+              <StickyNotes />
+            </section>
+          </div>
+          {/* Daily Quote */}
+          <section className="py-6">
+            <DailyImage />
           </section>
-
           {/* Daily Summary */}
           <section className="space-y-4">
             <DailySummary data={todayData} />
@@ -141,7 +144,19 @@ const Index = () => {
 
           {/* Achievements */}
           <section>
-            <AchievementsPanel stats={stats} />
+            <Accordion type='single' collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger
+                  className="w-full text-zinc-400 justify-center text-center [&>svg]:absolute [&>svg]:right-4"
+                >
+                  Achievements
+                </AccordionTrigger>
+                <AccordionContent>
+                  <AchievementsPanel stats={stats} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+
           </section>
         </div>
       </main>
