@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Mail, Lock, ArrowRight } from 'lucide-react';
 import { z } from 'zod';
+import { Navigation } from '@/components/Navigation';
 
 const authSchema = z.object({
   email: z.string().trim().email({ message: 'Please enter a valid email address' }),
@@ -122,6 +123,7 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
+      <Navigation/>
       <div className="w-full max-w-sm space-y-8 animate-fade-in">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">Focus</h1>
